@@ -14,8 +14,14 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
       //TODO
+
+      console.log(action.payload);
+
+      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
+        token: action.payload.token,
+        role: action.payload.role,
       };
     case "LOGOUT":
       localStorage.clear();
@@ -45,7 +51,21 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   React.useEffect(() => {
-    //TODO
+    const checkAuthToken = async () => {
+      const token = state.token;
+
+      if (!token) {
+        tokenExpireError(dispatch, "No token");
+        return;
+      }
+      try {
+        await sdk.check(state.role, token);
+      } catch (err) {
+        console.log(err);
+        tokenExpireError(dispatch, "TOKEN_EXPIRED");
+      }
+    };
+    checkAuthToken();
   }, []);
 
   return (
