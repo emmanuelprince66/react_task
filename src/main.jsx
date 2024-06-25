@@ -27,7 +27,7 @@ function renderRoutes(role) {
             path="/admin/dashboard"
             element={<AdminDashboardPage />}
           ></Route>
-          <Route path="*" exact element={<NotFoundPage />}></Route>
+          {/* <Route path="*" exact element={<NotFoundPage />}></Route> */}
         </Routes>
       );
       break;
